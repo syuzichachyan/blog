@@ -6,31 +6,27 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            login: "",
-            password: "",
+            email: "",
             isAuthenticated: false,
+            status:"offline"
         }
 
     }
 
     loginChange = (e) => {
-        this.setState({login: e.target.value});
+        this.setState({email: e.target.value});
     };
     passwordChange = (e) => {
         this.setState({password: e.target.value});
     };
     loginButtonClick = (e) => {
-        const {login, password} = this.state;
-        if (login.length && password.length == 8) {
-            this.setState({isAuthenticated: true});
-            let data = JSON.parse(localStorage.getItem('data')) || [];
-            if (!data.find(el => el.login === login && el.password === password)) {
-                data.push({'login': login, 'password': password});
-                localStorage.setItem('data', JSON.stringify(data));
-
-            }
-
-            this.props.history.push('/blog/create');
+        const {login,status} = this.state;
+        this.setState({isAuthenticated: true});
+        let usersDate = JSON.parse(localStorage.getItem('data')) || [];
+        if (!usersDate.find(el => el.login === login)) {
+            usersDate.push({'login': login, 'status': status});
+            localStorage.setItem('data', JSON.stringify(usersDate));
+            this.props.history.push('/blog/posts');
         }
 
     };
@@ -46,10 +42,10 @@ class Login extends Component {
                 </Router>)
 
         }
-else
+                else
             return (<div>
-                <input type='text' placeholder="Login" onChange={this.loginChange}/>
-                <input type="password" placeholder="Password" onChange={this.passwordChange}/>
+                <input type='text' placeholder="Login" onChange={this.loginChange} minLength="1"/>
+                <input type="text" placeholder="Password" onChange={this.passwordChange}/>
                 <button onClick={this.loginButtonClick}>LogIn</button>
             </div>)
 
