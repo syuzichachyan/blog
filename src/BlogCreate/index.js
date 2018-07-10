@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router,Route} from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 
 
 class BlogCreate extends Component {
@@ -42,13 +42,16 @@ class BlogCreate extends Component {
 
   render() {
     return (
-      <div>
-          <span>{this.onlineUser().email}</span>
-         <input type="text"  placeholder="date" onChange={this.dateOnChange} />
-         <input type="text"  placeholder="body"  onChange={this.bodyOnChange}/>
-         <input type="text"  placeholder="title" onChange={this.titleOnChange} />
-         <button onClick={this.saveOnClick}>Save</button>
-      </div>
+        <Router>
+            <div>
+                <span>{this.onlineUser().email}</span>
+                <input type="text" placeholder="date" onChange={this.dateOnChange}/>
+                <input type="text" placeholder="body" onChange={this.bodyOnChange}/>
+                <input type="text" placeholder="title" onChange={this.titleOnChange}/>
+                <button onClick={this.saveOnClick}>Save</button>
+
+            </div>
+        </Router>
     )
   }
 

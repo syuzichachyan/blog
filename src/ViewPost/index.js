@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
+import Comment from "../Comment";
 
 class ViewPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            body: ""
+            body: "",
+            flag:true
         }
     }
     getPostId=()=>{return this.props.match.params.id};
     addCommentOnClick = () => {
+
         const id=this.getPostId();
         const {body} = this.state;
         const usersData = JSON.parse(localStorage.getItem("usersData"))|| [];
@@ -18,9 +21,9 @@ class ViewPost extends Component {
             'author': onlineUser.email,
             'body': body,
             'postId': id,
-            'userId': onlineUser.email
         });
         localStorage.setItem("comments", JSON.stringify(comments));
+        this.setState({flag:false})
     };
     commentBodyChange = (e) => {
         this.setState({body: e.target.value});
@@ -31,7 +34,7 @@ class ViewPost extends Component {
         const post = posts.filter(post => {return  post.id == this.props.match.params.id})[0];
         const usersData = JSON.parse(localStorage.getItem("usersData"))|| [];
         const comments = JSON.parse(localStorage.getItem("comments")) || [];
-        const commentsOfCurrentPost = comments.filter(el => {return el.id == post.id}) || [];
+        const commentsOfCurrentPost = comments.filter(el => {return el.postId == post.id}) || [];
         const {body}=this.state;
 
         const onlineUsersPost = usersData.filter(user => { return user.isAuthenticated && user.email === post.author}) || [];
@@ -47,14 +50,13 @@ class ViewPost extends Component {
                 </div>
                 <div> Comments</div>
                 <div>Author email: {onlineUser.email}</div>
-                <input type="text" value={body} onChange={this.commentBodyChange}/>
-                <button onClick={this.addCommentOnClick}>Add Comment</button>
+                {this.state.flag? <input type="text" value={body} onChange={this.commentBodyChange}/>:null}
+                {this.state.flag?  <button onClick={this.addCommentOnClick}>Add Comment</button>:null}
 
-                {(commentsOfCurrentPost.length)?commentsOfCurrentPost.forEach(el => {
+                {(commentsOfCurrentPost.length)?commentsOfCurrentPost.map((el,index) => {
+
                     return (
-                        <div>
-                            el.id
-                        </div>
+                        <Comment item={el} key={index}/>
                     )
                 }):null}
             </div>

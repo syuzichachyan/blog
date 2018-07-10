@@ -18,7 +18,7 @@ class BlogsItem extends Component {
                 <div>Title {item.title}</div>
                 <div>Body {item.body}</div>
                 <div>Date {item.date}</div>
-
+                <Link to ={`/blog/${item.id}`}>View</Link>
             </div>
         )
     }
