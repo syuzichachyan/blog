@@ -1,55 +1,50 @@
 import React, {Component} from 'react';
-import {Redirect, Route, Router} from 'react-router-dom';
-import BlogCreate from "../BlogCreate";
+import {Redirect} from 'react-router-dom';
+
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            isAuthenticated: false,
-            status:"offline"
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      isAuthenticated: false,
 
     }
 
-    loginChange = (e) => {
-        this.setState({email: e.target.value});
-    };
-    passwordChange = (e) => {
-        this.setState({password: e.target.value});
-    };
-    loginButtonClick = (e) => {
-        const {login,status} = this.state;
-        this.setState({isAuthenticated: true});
-        let usersDate = JSON.parse(localStorage.getItem('data')) || [];
-        if (!usersDate.find(el => el.login === login)) {
-            usersDate.push({'login': login, 'status': status});
-            localStorage.setItem('data', JSON.stringify(usersDate));
-            this.props.history.push('/blog/posts');
-        }
+  }
 
-    };
+  loginChange = (e) => {
+    this.setState({email: e.target.value});
+  };
 
-    render() {
-        const {login, password, isAuthenticated} = this.state;
-        if (isAuthenticated) {
-            return (
-                <Router>
-                    <Route path="/blog/create" component={BlogCreate}/>
-                    <Redirect to='/blog/create' login={login} password={password}/>
-
-                </Router>)
-
-        }
-                else
-            return (<div>
-                <input type='text' placeholder="Login" onChange={this.loginChange} minLength="1"/>
-                <input type="text" placeholder="Password" onChange={this.passwordChange}/>
-                <button onClick={this.loginButtonClick}>LogIn</button>
-            </div>)
-
+  loginButtonClick = (e) => {
+    const {email} = this.state;
+    let usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+    this.setState({isAuthenticated: true});
+    if (!usersData.find(el => el.email === email)) {
+      usersData.push({'email': email, 'isAuthenticated': true});
+      localStorage.setItem('usersData', JSON.stringify(usersData));
     }
+
+  };
+
+  render() {
+
+    const {isAuthenticated} = this.state;
+    if (isAuthenticated) {
+      return (
+        <Redirect to="/blog/posts"/>)
+    }
+    else
+      return (
+        <div>
+          <input type='text' placeholder="Login" onChange={this.loginChange} minLength="1"/>
+          <input type="password" placeholder="Password"/>
+          <button onClick={this.loginButtonClick}>LogIn</button>
+        </div>
+      )
+
+  }
 }
 
 export default Login;

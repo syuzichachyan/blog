@@ -1,17 +1,24 @@
-import React,{Component} from 'react';
-import { Switch,BrowserRouter as Router, Route } from "react-router-dom";
+import React, {Component} from 'react';
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Login from '../Login';
-import Blogs from '../Blogs';
+import BlogPosts from '../BlogPosts';
 import BlogCreate from '../BlogCreate';
-class  Routers extends Component{
+import ViewPost from "../ViewPost";
+
+class Routers extends Component {
     render() {
         return (
-        <Router>
-            <Route exact path="/" component={Blogs}/>
-            <Route  path="/login" component={Login}/>
-            <Route exact path="/" component={BlogCreate}/>//change to private route
-        </Router>
+            <Router>
+                <Switch>
+                        <Route path="/login" component={Login}/>
+                        <Route path="/blog/posts" component={BlogPosts}/>
+                        <Route path="/blog/create" component={BlogCreate}/>
+                        <Route path="/blog/:id" component={ViewPost}/>
+
+                </Switch>
+            </Router>
         )
     }
 }
+
 export default Routers;
