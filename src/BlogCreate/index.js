@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Redirect} from 'react-router-dom';
+import Login from "../Login";
 
 
 class BlogCreate extends Component {
@@ -11,18 +12,12 @@ class BlogCreate extends Component {
             date: (this.props.item) ? this.props.item.title : "",
             title: (this.props.item) ? this.props.item.date : "",
             body: (this.props.item) ? this.props.item.body : "",
-            isSaveClicked:false
+            isSaveClicked: false
         }
 
     }
 
-    onlineUser = () => {
-        const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
 
-        return usersData.filter(user => {
-            return user.isAuthenticated
-        })[0];
-    };
 
     dateOnChange = (e) => {
         this.setState({date: e.target.value});
@@ -39,7 +34,7 @@ class BlogCreate extends Component {
         let posts = JSON.parse(localStorage.getItem('posts')) || [];
         if (this.props.item)
             posts[this.props.item.id] = {
-                'author': this.onlineUser().email,
+                'author': Login.onlineUser().email,
                 'date': date,
                 'title': title,
                 'body': body,
@@ -47,35 +42,37 @@ class BlogCreate extends Component {
             };
         else
             posts.push({
-                'author': this.onlineUser().email,
+                'author': Login.onlineUser().email,
                 'date': date,
                 'title': title,
                 'body': body,
                 id: BlogCreate.id++
             });
         localStorage.setItem('posts', JSON.stringify(posts));
-        this.setState({isSaveClicked:true});
+        this.setState({isSaveClicked: true});
 
     };
-
-
     render() {
-        const {isSaveClicked}=this.state;
-        let {isItOnlineUsersPost}=this.props;
-        isItOnlineUsersPost= isItOnlineUsersPost==undefined || isItOnlineUsersPost ?true:false;
-
-        if(isSaveClicked)
+        const {isSaveClicked} = this.state;
+        let {isItOnlineUsersPost} = this.props;
+        isItOnlineUsersPost = isItOnlineUsersPost == undefined || isItOnlineUsersPost ? true : false;
+        if (isSaveClicked)
             return (<Redirect to={"/blog/posts"}/>);
-
         return (
             <Router>
                 <div>
-                    <span>{this.onlineUser().email}</span>
-                    {(isItOnlineUsersPost)?  <input type="text" placeholder="date" onChange={this.dateOnChange} value={this.state.date}/>:(<div>date {this.state.date}</div>)}
-                    {(isItOnlineUsersPost)? <input type="text" placeholder="body" onChange={this.bodyOnChange} value={this.state.body}/>:(<div>body  {this.state.body}</div>)}
-                    {(isItOnlineUsersPost)? <input type="text" placeholder="title" onChange={this.titleOnChange} value={this.state.title}/>:(<div>title {this.state.title}</div>)}
-                    {(isItOnlineUsersPost)?  <button onClick={this.saveOnClick}>Save</button>:null}
-
+                    <span>{Login.onlineUser().email}</span>
+                    {(isItOnlineUsersPost) ? <div>
+                            <input type="text" placeholder="date" onChange={this.dateOnChange} value={this.state.date}/>
+                            <input type="text" placeholder="body" onChange={this.bodyOnChange} value={this.state.body}/>
+                            <input type="text" placeholder="title" onChange={this.titleOnChange} value={this.state.title}/>
+                            <button onClick={this.saveOnClick}>Save</button>
+                        </div> :
+                        <div>
+                            <div>date {this.state.date}</div>
+                            <div>body {this.state.body}</div>
+                            <div>title {this.state.title}</div>
+                        </div>}
                 </div>
             </Router>
         )

@@ -5,6 +5,7 @@ import BlogPosts from '../BlogPosts';
 import BlogCreate from '../BlogCreate';
 import ViewPost from "../ViewPost";
 import PrivateRoute from  '../PrivateRoute';
+import Error from '../Error';
 
 class Routers extends Component {
     render() {
@@ -12,11 +13,11 @@ class Routers extends Component {
             <Router>
                 <Switch>
                         <Route exact path="/" component={BlogPosts}/>
-                        <Route path="/login" component={Login}/>
-                        <Route path="/blog/posts" component={BlogPosts}/>
-                        <PrivateRoute path="/blog/create" component={BlogCreate}/>
-                        <PrivateRoute  path="/blog/:id" component={ViewPost}/>
-
+                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/blog/posts" component={BlogPosts}/>
+                        <PrivateRoute exact path="/blog/create" component={BlogCreate}/>
+                        <PrivateRoute exact  path="/blog/:id" component={ViewPost}/>
+                        <Route component={Error} />
                 </Switch>
             </Router>
         )

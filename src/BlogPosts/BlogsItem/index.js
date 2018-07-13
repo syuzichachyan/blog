@@ -1,27 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 
-class BlogsItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props
-        }
-    }
-
-    render() {
-        const {item} = this.props;
-
-        return (
-            <div>
-                <div>Author {item.author}</div>
-                <div>Title {item.title}</div>
-                <div>Body {item.body}</div>
-                <div>Date {item.date}</div>
-                <Link to ={`/blog/${item.id}`}>View</Link>
-            </div>
-        )
-    }
+function BlogsItem(props) {
+    const {item} = props;
+    return (
+        <div>
+            <div>Author {item.author}</div>
+            <div>Title {item.title}</div>
+            <div>Body {item.body}</div>
+            <div>Date {item.date}</div>
+            <Link to={`/blog/${item.id}`}>View</Link>
+        </div>
+    )
 }
+
 
 export default BlogsItem;

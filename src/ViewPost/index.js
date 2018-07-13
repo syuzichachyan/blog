@@ -1,62 +1,39 @@
 import React, {Component} from 'react';
-import Comment from "../Comment";
 import BlogCreate from "../BlogCreate";
+import Comments from "../Comments";
+import Login from "../Login";
 
 class ViewPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            body: "",
-            flag:true
+            flag: true,
+            posts: JSON.parse(localStorage.getItem("posts")) || []
         }
     }
-    getPostId=()=>{return this.props.match.params.id};
-    addCommentOnClick = () => {
 
-        const id=this.getPostId();
-        const {body} = this.state;
-        const usersData = JSON.parse(localStorage.getItem("usersData"))|| [];
-        const comments = JSON.parse(localStorage.getItem("comments")) || [];
-        const onlineUser = usersData.filter(user =>{return  user.isAuthenticated})[0];
-        comments.push({
-            'author': onlineUser.email,
-            'body': body,
-            'postId': id,
-        });
-        localStorage.setItem("comments", JSON.stringify(comments));
-        this.setState({flag:false})
+    getPostId = () => {
+        return this.props.match.params.id
     };
-    commentBodyChange = (e) => {
-        this.setState({body: e.target.value});
+
+
+    filterPostWithId = (id) => {
+        const {posts} = this.state;
+        return (
+            posts.find(post => {
+                return post.id === +this.props.match.params.id
+            }))
     };
 
 
     render() {
-        const posts = JSON.parse(localStorage.getItem("posts")) || [];
-        const post = posts.find(post => {return  post.id === +this.props.match.params.id});
-        const usersData = JSON.parse(localStorage.getItem("usersData"))|| [];
-        const comments = JSON.parse(localStorage.getItem("comments")) || [];
-        const commentsOfCurrentPost = comments.filter(el => {return +el.postId === post.id}) || [];
-        const {body}=this.state;
 
-        const isItOnlineUsersPost = usersData.some(user => { return user.isAuthenticated && user.email === post.author});
+        const post = this.filterPostWithId(this.getPostId());
+        const onlineUser = Login.onlineUser();
         return (
             <div>
-
-                <div>
-                    <BlogCreate item={post} isItOnlineUsersPost={isItOnlineUsersPost}/>
-
-                </div>
-                <div> Comments</div>
-                {this.state.flag? <input type="text" value={body} onChange={this.commentBodyChange}/>:null}
-                {this.state.flag?  <button onClick={this.addCommentOnClick}>Add Comment</button>:null}
-
-                {(commentsOfCurrentPost.length)?commentsOfCurrentPost.map((el,index) => {
-
-                    return (
-                        <Comment item={el} key={index}/>
-                    )
-                }):null}
+                <BlogCreate item={post} isItOnlineUsersPost={onlineUser.email === post.author}/>
+                <Comments postId={this.getPostId()} author={onlineUser.email}/>
             </div>
 
 

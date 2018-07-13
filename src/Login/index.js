@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
+import style from './style';
+import {withStyles} from '@material-ui/core/styles';
 
 
 class Login extends Component {
@@ -8,33 +10,45 @@ class Login extends Component {
         this.state = {
             email: "",
             isAuthenticated: false,
+            usersData: JSON.parse(localStorage.getItem("usersData")) || []
 
         }
 
     }
 
+    static onlineUser = () => {
+        const usersData = JSON.parse(localStorage.getItem("usersData")) || [];
+        return usersData.filter(user => {
+            return user.isAuthenticated
+        })[0];
+    };
+
     loginChange = (e) => {
         this.setState({email: e.target.value});
     };
     makeAllOffline = (usersData) => {
-        return (usersData.length ? usersData.map((el) => {
+        usersData = (usersData.length ? usersData.map((el) => {
             el.isAuthenticated = false;
-            return el;
         }) : []);
+        localStorage.setItem('usersData', JSON.stringify(usersData));
+        this.setState({usersData})
+
     };
     loginButtonClick = (e) => {
         const {email} = this.state;
-        let usersData = this.makeAllOffline(JSON.parse(localStorage.getItem('usersData')) || []);
+        const {usersData} = this.state;
+        this.makeAllOffline(usersData);
         this.setState({isAuthenticated: true});
         if (!usersData.find(el => el.email === email)) {
             usersData.push({'email': email, 'isAuthenticated': true});
             localStorage.setItem('usersData', JSON.stringify(usersData));
+            this.setState({usersData});
         }
 
     };
 
     render() {
-
+        const {classes} = this.props;
         const {isAuthenticated} = this.state;
         if (isAuthenticated && this.props.location.state)
             return <Redirect to={this.props.location.state.from}/>;
@@ -45,14 +59,14 @@ class Login extends Component {
 
         else
             return (
-                <div>
-                    <input type='email' placeholder="Login" onChange={this.loginChange}/>
-                    <input type="password" placeholder="Password" />
-                    <button onClick={this.loginButtonClick}>LogIn</button>
-                </div>
+                <form className={classes.root} onSubmit={this.loginButtonClick}>
+                    <input type="email" value={this.state.email} onChange={this.loginChange}/>
+                    <input type="password" minLength="8"/>
+                    <input type="submit" value="Login"/>
+                </form>
             )
 
     }
 }
 
-export default Login;
+export default withStyles(style)(Login);
