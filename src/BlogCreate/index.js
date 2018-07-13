@@ -18,7 +18,6 @@ class BlogCreate extends Component {
     }
 
 
-
     dateOnChange = (e) => {
         this.setState({date: e.target.value});
     };
@@ -52,20 +51,32 @@ class BlogCreate extends Component {
         this.setState({isSaveClicked: true});
 
     };
+
     render() {
         const {isSaveClicked} = this.state;
         let {isItOnlineUsersPost} = this.props;
-        isItOnlineUsersPost = isItOnlineUsersPost == undefined || isItOnlineUsersPost ? true : false;
         if (isSaveClicked)
             return (<Redirect to={"/blog/posts"}/>);
         return (
             <Router>
                 <div>
-                    <span>{Login.onlineUser().email}</span>
-                    {(isItOnlineUsersPost) ? <div>
-                            <input type="text" placeholder="date" onChange={this.dateOnChange} value={this.state.date}/>
-                            <input type="text" placeholder="body" onChange={this.bodyOnChange} value={this.state.body}/>
-                            <input type="text" placeholder="title" onChange={this.titleOnChange} value={this.state.title}/>
+                    <h1>{Login.onlineUser().email}</h1>
+                    {!(isItOnlineUsersPost===false) ?
+                        <div>
+                            <div>
+
+                                <input type="text" placeholder="date" onChange={this.dateOnChange}
+                                       value={this.state.date}/>
+                            </div>
+                            <div>
+                                <input type="text" placeholder="body" onChange={this.bodyOnChange}
+                                       value={this.state.body}/>
+                            </div>
+                            <div>
+                                <input type="text" placeholder="title" onChange={this.titleOnChange}
+                                       value={this.state.title}/>
+
+                            </div>
                             <button onClick={this.saveOnClick}>Save</button>
                         </div> :
                         <div>

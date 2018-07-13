@@ -39,7 +39,6 @@ class Comments extends Component {
     };
 
     render() {
-        const {comments} = this.state;
         const filteredComments = this.filterCommentsWithId();
         const {body} = this.state;
         return (

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import BlogCreate from './';
+import Login from '..';
 
 class LoginOrLogOut extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isAuthenticated: BlogCreate.onlineUser()
+            isAuthenticated: Login.onlineUser()
         }
 
     }
