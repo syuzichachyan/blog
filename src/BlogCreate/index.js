@@ -9,8 +9,8 @@ class BlogCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: (this.props.item) ? this.props.item.title : "",
-            title: (this.props.item) ? this.props.item.date : "",
+            date: (this.props.item) ? this.props.item.date : "",
+            title: (this.props.item) ? this.props.item.title : "",
             body: (this.props.item) ? this.props.item.body : "",
             isSaveClicked: false
         }
@@ -61,7 +61,7 @@ class BlogCreate extends Component {
             <Router>
                 <div>
                     <h1>{Login.onlineUser().email}</h1>
-                    {!(isItOnlineUsersPost===false) ?
+                    {!(isItOnlineUsersPost === false) ?
                         <div>
                             <div>
 

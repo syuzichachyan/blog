@@ -15,7 +15,7 @@ class Comments extends Component {
         let {comments} = this.state;
         const {postId} = this.props;
         const {author} = this.props;
-        if(body.trim()!=="") {
+        if (body.trim() !== "") {
             comments.push({body, postId, author});
             localStorage.setItem("comments", JSON.stringify(comments));
             this.setState({comments});
@@ -24,14 +24,12 @@ class Comments extends Component {
 
     };
 
-
     commentBodyChange = (e) => {
         this.setState({body: e.target.value});
     };
 
-
     filterCommentsWithId = () => {
-        const {postId}=this.props;
+        const {postId} = this.props;
         const {comments} = this.state;
         return comments.filter(el => {
             return el.postId === postId
@@ -50,7 +48,6 @@ class Comments extends Component {
                 </div>
 
                 {(filteredComments.length) ? filteredComments.map((el, index) => {
-
                     return (
                         <Comment item={el} key={index}/>
                     )
