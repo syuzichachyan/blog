@@ -9,18 +9,12 @@ class BlogCreate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: (this.props.item) ? this.props.item.date : "",
             title: (this.props.item) ? this.props.item.title : "",
             body: (this.props.item) ? this.props.item.body : "",
             isSaveClicked: false
         }
 
     }
-
-
-    dateOnChange = (e) => {
-        this.setState({date: e.target.value});
-    };
 
     bodyOnChange = (e) => {
         this.setState({body: e.target.value});
@@ -29,12 +23,13 @@ class BlogCreate extends Component {
         this.setState({title: e.target.value});
     };
     saveOnClick = () => {
-        const {date, title, body} = this.state;
+        const {title, body} = this.state;
+        if (body.trim() === "" || title.trim() === "")
+            return;
         let posts = JSON.parse(localStorage.getItem('posts')) || [];
         if (this.props.item)
             posts[this.props.item.id] = {
                 'author': Login.onlineUser().email,
-                'date': date,
                 'title': title,
                 'body': body,
                 id: this.props.item.id
@@ -42,7 +37,6 @@ class BlogCreate extends Component {
         else
             posts.push({
                 'author': Login.onlineUser().email,
-                'date': date,
                 'title': title,
                 'body': body,
                 id: BlogCreate.id++
@@ -64,11 +58,6 @@ class BlogCreate extends Component {
                     {!(isItOnlineUsersPost === false) ?
                         <div>
                             <div>
-
-                                <input type="text" placeholder="date" onChange={this.dateOnChange}
-                                       value={this.state.date}/>
-                            </div>
-                            <div>
                                 <input type="text" placeholder="body" onChange={this.bodyOnChange}
                                        value={this.state.body}/>
                             </div>
@@ -80,7 +69,6 @@ class BlogCreate extends Component {
                             <button onClick={this.saveOnClick}>Save</button>
                         </div> :
                         <div>
-                            <div>date {this.state.date}</div>
                             <div>body {this.state.body}</div>
                             <div>title {this.state.title}</div>
                         </div>}

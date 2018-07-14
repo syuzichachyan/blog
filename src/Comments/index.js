@@ -43,7 +43,7 @@ class Comments extends Component {
             <div>
                 <h1>Comments</h1>
                 <div>
-                    <input type="text" value={body} onChange={this.commentBodyChange} minlength="1"/>
+                    <input type="text" value={body} onChange={this.commentBodyChange} minLength="1"/>
                     <button onClick={this.addCommentOnClick}>Add Comment</button>
                 </div>
 
