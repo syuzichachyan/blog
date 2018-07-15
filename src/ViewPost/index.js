@@ -1,39 +1,32 @@
 import React, {Component} from 'react';
 import BlogCreate from "../BlogCreate";
 import Comments from "../Comments";
-import Login from "../Login";
 
 class ViewPost extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            flag: true,
-            posts: JSON.parse(localStorage.getItem("posts")) || []
+        this.state={
+            id:this.props.id
         }
     }
 
-    getPostId = () => {
-        return this.props.match.params.id
-    };
 
 
     filterPostWithId = (id) => {
-        const {posts} = this.state;
+        const {posts} = this.props;
         return (
             posts.find(post => {
-                return post.id === +this.props.match.params.id
+                return post.id === +id
             }))
     };
 
-
     render() {
-
-        const post = this.filterPostWithId(this.getPostId());
-        const onlineUser = Login.onlineUser();
+        const post = this.filterPostWithId(this.state.id);
+        const {onlineUser} = this.props;
         return (
             <div>
-                <BlogCreate item={post} isItOnlineUsersPost={onlineUser.email === post.author}/>
-                <Comments postId={this.getPostId()} author={onlineUser.email}/>
+                <BlogCreate item={post} isItOnlineUsersPost={onlineUser().email === post.author} onlineUser={onlineUser} editPost={this.props.editPost} addPost={this.props.addPost} />
+                <Comments postId={this.state.id} author={onlineUser().email}/>
             </div>
 
 

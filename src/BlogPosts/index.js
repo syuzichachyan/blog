@@ -3,21 +3,20 @@ import BlogsItem from "./BlogsItem";
 import {Redirect} from 'react-router-dom';
 
 class BlogPosts extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isButtonClicked: false
+        }
+    }
     createPost = () => {
         this.setState({isButtonClicked: true});
 
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            blogPosts: JSON.parse(localStorage.getItem("posts")) || [],
-            isButtonClicked: false
-        }
-    }
-
     render() {
-        const {blogPosts, isButtonClicked} = this.state;
+        const {posts} = this.props;
+        const {isButtonClicked} = this.state;
         if (isButtonClicked)
             return (<Redirect to={'/blog/create'}/>);
 
@@ -26,7 +25,7 @@ class BlogPosts extends Component {
             <div>
                 <button onClick={this.createPost}>Create post</button>
                 <div>
-                    {blogPosts.map(el => {
+                    {posts.map(el => {
                         return (<BlogsItem item={el} key={el.id}/>);
                     })
                     }
